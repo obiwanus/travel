@@ -1,0 +1,20 @@
+html, body {
+  font-size: 16px;
+  /*line-height: 1.5;*/
+  background: #ECF0F3;
+}
+nav.navbar {
+  border-top: 4px solid #276cda;
+  margin-bottom: 1rem;
+}
+.navbar-item.brand-text {
+  font-size: 26px;
+  line-height: 26px;
+  font-weight: 300;
+}
+.navbar-item, .navbar-link {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+}
+
