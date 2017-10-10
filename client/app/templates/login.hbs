@@ -5,39 +5,44 @@
       <div class="column">
         <h1 class="title">Log in</h1>
 
-        <div class="field">
-          <label class="label">Email</label>
-          <div class="control has-icons-left has-icons-right">
-            <input class="input is-danger" type="email" placeholder="Email input" value="hello@">
-            <span class="icon is-small is-left">
-              <i class="fa fa-envelope"></i>
-            </span>
-            <span class="icon is-small is-right">
-              <i class="fa fa-warning"></i>
-            </span>
-          </div>
-          <p class="help is-danger">This email is invalid</p>
-        </div>
+        <form {{action 'login' on='submit'}}>
 
-        <div class="field">
-          <label class="label">Password</label>
-          <div class="control has-icons-left">
-            <input class="input" type="password" placeholder="password">
-            <span class="icon is-small is-left">
-              <i class="fa fa-lock"></i>
-            </span>
+          <div class="field">
+            <label class="label">Email</label>
+            <div class="control has-icons-left has-icons-right">
+              {{input class='input' type='email' placeholder='Enter your email' value=email}}
+              <span class="icon is-small is-left">
+                <i class="fa fa-envelope"></i>
+              </span>
+              <span class="icon is-small is-right">
+                <i class="fa fa-warning"></i>
+              </span>
+            </div>
+            {{!-- <p class="help is-danger">This email is invalid</p> --}}
           </div>
-          <p class="help">{{#link-to "forgot-password"}}Forgot password?{{/link-to}}</p>
-        </div>
 
-        <div class="field is-grouped">
-          <div class="control">
-            <button class="button is-primary">Sign in</button>
+          <div class="field">
+            <label class="label">Password</label>
+            <div class="control has-icons-left">
+              {{input class='input' type='password' placeholder='Enter your password' value=password}}
+              <span class="icon is-small is-left">
+                <i class="fa fa-lock"></i>
+              </span>
+            </div>
+            <p class="help">{{#link-to "forgot-password"}}Forgot password?{{/link-to}}</p>
           </div>
-          <div class="control">
-            {{#link-to "signup" class="button is-link"}}Sign up{{/link-to}}
+
+          <div class="field is-grouped">
+            <div class="control">
+              <button type="submit" class="button is-primary">Sign in</button>
+            </div>
+            <div class="control">
+              {{#link-to "signup" class="button is-link"}}Sign up{{/link-to}}
+            </div>
           </div>
-        </div>
+
+        </form>
+
       </div>
       <div class="column"></div>
     </div>

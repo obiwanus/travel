@@ -1,28 +1,19 @@
 <nav class="navbar is-white">
- <div class="container">
-   <div class="navbar-brand">
-     <a class="navbar-item brand-text" href="/">
-       Travel planner
-     </a>
-   </div>
-   <div class="navbar-menu">
-     <div class="navbar-end">
-       <a class="navbar-item" href="admin.html">
-         Home
-       </a>
-       <a class="navbar-item" href="admin.html">
-         Orders
-       </a>
-       <a class="navbar-item" href="admin.html">
-         Payments
-       </a>
-       <a class="navbar-item" href="admin.html">
-         Exceptions
-       </a>
-     </div>
-
-   </div>
- </div>
+  <div class="container">
+  <div class="navbar-brand">
+  <a class="navbar-item brand-text" href="/">
+    Travel planner
+  </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-end">
+      {{#if session.isAuthenticated}}
+        <div class="navbar-item">Hi username</div>
+        <a class="navbar-item" {{action 'invalidateSession'}}>Logout</a>
+      {{/if}}
+    </div>
+  </div>
+</div>
 </nav>
 
 {{outlet}}
