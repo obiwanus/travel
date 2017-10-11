@@ -26,7 +26,7 @@ export default Base.extend({
     let ajax = this.get('ajax');
     return new Ember.RSVP.Promise(function(resolve, reject) {
       ajax.POST('/login/', data).then((response) => {
-        resolve(toCamel(response.user));
+        resolve(response.user);
       }, (xhr) => {
         reject(xhr);
       });

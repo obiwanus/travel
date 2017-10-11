@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from auth.models import UserProfile
 from auth.forms import LoginForm
+from auth.serializers import UserS, UserProfileS
 
 
 @permission_classes([])
@@ -21,7 +22,7 @@ class LoginView(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
         user = auth.authenticate(
-            username=form.cleaned_data['email'],
+            email=form.cleaned_data['email'],
             password=form.cleaned_data['password']
         )
         if user is None:
@@ -30,8 +31,8 @@ class LoginView(APIView):
 
         # User found
         auth.login(request, user)
-        user = UserProfile.objects.get(user=user)
-        serializer = UserProfileS(user)
+        profile, _ = UserProfile.objects.get_or_create(user=user)
+        serializer = UserProfileS(profile)
 
         return Response({'success': "true", 'user': serializer.data}, status=status.HTTP_200_OK)
 
