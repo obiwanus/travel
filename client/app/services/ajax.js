@@ -64,7 +64,7 @@ export default Ember.Service.extend({
     if (url.indexOf('http') == 0) {
       return url;
     } else {
-      return `${ENV.APP.API_HOST}/api/` + url;
+      return `${ENV.APP.API_HOST}/api` + url;
     }
   },
 

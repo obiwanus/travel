@@ -14,3 +14,9 @@ class UserProfile(models.Model):
         (USER_MANAGER, 'User manager'),
         (ADMIN, 'Administrator'),
     ))
+
+    @property
+    def role_display(self):
+        return self.get_role_display()
+
+
