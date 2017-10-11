@@ -1,22 +1,29 @@
 from django.db import models
-from django.conf import settings
+from django.db.models.signals import post_save
+from django.contrib.auth.models import User
+from django.dispatch import receiver
 
 
 class UserProfile(models.Model):
-    USER = 0
-    USER_MANAGER = 1
-    ADMIN = 2
+    USER = 'Normal user'
+    USER_MANAGER = 'User manager'
+    ADMIN = 'Administrator'
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='profile',
-                                on_delete=models.CASCADE)
-    role = models.SmallIntegerField(default=USER, choices=(
+    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
+    role = models.CharField(max_length=15, default=USER, choices=(
         (USER, 'Normal user'),
         (USER_MANAGER, 'User manager'),
         (ADMIN, 'Administrator'),
     ))
 
-    @property
-    def role_display(self):
-        return self.get_role_display()
+    def __str__(self):
+        return self.user.email
+
+
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+    instance.profile.save()
 
 

@@ -5,6 +5,9 @@ from django.conf import settings
 
 
 class EmailBackend(ModelBackend):
+    """
+    Checks user's email instead of username
+    """
 
     def authenticate(self, email=None, password=None):
         UserModel = get_user_model()

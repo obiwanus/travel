@@ -4,17 +4,17 @@ import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mi
 export default Ember.Route.extend(ApplicationRouteMixin, {
 
   title: 'Travel Planner',
-  csrf: Ember.inject.service(),
+  user: Ember.inject.service(),
 
   beforeModel() {
-    this.get('csrf').refreshToken();
+    this.get('user').load();
   },
 
   sessionAuthenticated() {
     this._super(...arguments);
 
     // Reload user after login. This will refresh the csrf token
-    this.get('csrf').refreshToken();
+    this.get('user').load();
   },
 
 });

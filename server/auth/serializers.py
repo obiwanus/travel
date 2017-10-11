@@ -15,9 +15,8 @@ class UserS(serializers.ModelSerializer):
 class UserProfileS(serializers.ModelSerializer):
 
     user = UserS()
-    role_display = serializers.CharField()
 
     class Meta:
         model = UserProfile
-        fields = ('user', 'role', 'role_display')
+        fields = ('user', 'role')
 

@@ -1,19 +1,25 @@
 <nav class="navbar is-white">
   <div class="container">
-  <div class="navbar-brand">
-  <a class="navbar-item brand-text" href="/">
-    {{!-- Travel planner --}}
-  </a>
-  </div>
-  <div class="navbar-menu">
-    <div class="navbar-end">
-      {{#if session.isAuthenticated}}
-        <div class="navbar-item">Hi username</div>
-        <a class="navbar-item" {{action 'invalidateSession'}}>Logout</a>
-      {{/if}}
+    <div class="navbar-brand">
+    <a class="navbar-item brand-text" href="/">
+      {{!-- Travel planner --}}
+    </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-end">
+        {{#if user.isAuthenticated}}
+          <div class="navbar-item">Hi {{user.name}}</div>
+          {{#if user.isAdmin}}
+            <a class="navbar-item" {{action 'logout'}}>Admin</a>
+          {{/if}}
+          {{#if user.isUserManager}}
+            <a class="navbar-item" {{action 'logout'}}>Users</a>
+          {{/if}}
+          <a class="navbar-item" {{action 'logout'}}>Logout</a>
+        {{/if}}
+      </div>
     </div>
   </div>
-</div>
 </nav>
 
 <div style="position: relative">
