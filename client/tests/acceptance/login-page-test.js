@@ -18,3 +18,29 @@ test('Can login as normal user', function(assert) {
     assert.equal(currentURL(), '/');
   });
 });
+
+test('Can login as user manager', function(assert) {
+  loginAs('user manager');
+
+  andThen(function() {
+    assert.equal(currentURL(), '/');
+  });
+});
+
+test('Can login as admin user', function(assert) {
+  loginAs('admin');
+
+  andThen(function() {
+    assert.equal(currentURL(), '/');
+  });
+});
+
+test('Cannot login with wrong password', function(assert) {
+  loginAs('normal user', 'wrong_password');
+
+  andThen(function() {
+    assert.equal(currentURL(), '/login');
+    let error = find('p.is-danger:contains("Wrong")');
+    assert.ok(error.length >= 1, 'No error displayed');
+  });
+});
