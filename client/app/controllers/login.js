@@ -2,12 +2,23 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
   session: Ember.inject.service(),
+  messages: Ember.inject.service(),
 
   actions: {
     login() {
       let { email, password } = this.getProperties('email', 'password');
-      this.get('session').authenticate('authenticator:django-session', email, password).catch((reason) => {
-        debugger;
+      this.set('inProgress', true);
+      this.get('session').authenticate('authenticator:django-session', email, password).catch((xhr) => {
+        const errors = (xhr.responseJSON && xhr.responseJSON.errors) || ["Unable to contact the server"];
+        if (Array.isArray(errors)) {
+          errors.forEach((error) => {
+            this.get('messages').error(this, error);
+          });
+        } else {
+          this.set('formErrors', errors);
+        }
+      }).finally(() => {
+        this.set('inProgress', false);
       });
     },
   },

@@ -14,11 +14,8 @@
               <span class="icon is-small is-left">
                 <i class="fa fa-envelope"></i>
               </span>
-              <span class="icon is-small is-right">
-                <i class="fa fa-warning"></i>
-              </span>
             </div>
-            {{!-- <p class="help is-danger">This email is invalid</p> --}}
+            {{form-errors errors=formErrors for='email'}}
           </div>
 
           <div class="field">
@@ -29,12 +26,20 @@
                 <i class="fa fa-lock"></i>
               </span>
             </div>
+            {{form-errors errors=formErrors for='password'}}
             <p class="help">{{#link-to "forgot-password"}}Forgot password?{{/link-to}}</p>
           </div>
 
+          {{form-errors errors=formErrors for='__all__'}}
           <div class="field is-grouped">
             <div class="control">
-              <button type="submit" class="button is-primary">Sign in</button>
+              <button type="submit" class="button is-primary">
+                {{#if inProgress}}
+                  Signing in...
+                {{else}}
+                  Sign in
+                {{/if}}
+              </button>
             </div>
             <div class="control">
               {{#link-to "signup" class="button is-link"}}Sign up{{/link-to}}
