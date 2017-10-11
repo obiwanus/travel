@@ -10,7 +10,7 @@
         {{#if user.isAuthenticated}}
           <div class="navbar-item">Hi {{user.name}}</div>
           {{#if user.isAdmin}}
-            <a class="navbar-item" {{action 'logout'}}>Admin</a>
+            <a class="navbar-item" {{action 'logout'}}>All trips</a>
           {{/if}}
           {{#if user.isUserManager}}
             <a class="navbar-item" {{action 'logout'}}>Users</a>

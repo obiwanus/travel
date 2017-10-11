@@ -6,7 +6,7 @@ export default Ember.Service.extend({
   csrf: Ember.inject.service(),
 
   load() {
-    return new Ember.RSVP.Promise((resolve, reject) => {
+    return new Ember.RSVP.Promise((resolve) => {
       let data = this.get('session.data.authenticated');
 
       if (!Ember.isEmpty(data)) {
