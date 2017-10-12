@@ -9,11 +9,12 @@
       <div class="navbar-end">
         {{#if user.isAuthenticated}}
           <div class="navbar-item">Hi {{user.name}}</div>
+          {{#link-to 'trips' class="navbar-link"}}My trips{{/link-to}}
           {{#if user.isAdmin}}
-            <a class="navbar-item" {{action 'logout'}}>All trips</a>
+            <a class="navbar-link">All trips</a>
           {{/if}}
           {{#if user.isUserManager}}
-            <a class="navbar-item" {{action 'logout'}}>Users</a>
+            {{#link-to 'users' class="navbar-link"}}Users{{/link-to}}
           {{/if}}
           <a class="navbar-item" {{action 'logout'}}>Logout</a>
         {{/if}}
@@ -30,4 +31,11 @@
   </div>
 </div>
 
-{{outlet}}
+<div class="columns">
+  <div class="column"></div>
+  <div class="column is-two-thirds">
+    {{outlet}}
+  </div>
+  <div class="column"></div>
+</div>
+

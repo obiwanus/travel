@@ -1,7 +1,17 @@
+from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User as DjangoUser
 from django.dispatch import receiver
+
+
+class User(DjangoUser):
+    class Meta:
+        proxy = True
+
+    @property
+    def role(self):
+        return self.profile.role
 
 
 class UserProfile(models.Model):
@@ -9,7 +19,8 @@ class UserProfile(models.Model):
     USER_MANAGER = 'User manager'
     ADMIN = 'Administrator'
 
-    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='profile',
+                                on_delete=models.CASCADE)
     role = models.CharField(max_length=15, default=USER, choices=(
         (USER, 'Normal user'),
         (USER_MANAGER, 'User manager'),

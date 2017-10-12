@@ -10,8 +10,7 @@ export default Ember.Service.extend({
       let data = this.get('session.data.authenticated');
 
       if (!Ember.isEmpty(data)) {
-        this.set('user', data.user);
-        this.set('role', data.role);
+        this.set('user', data);
 
         // Refresh token every time we load user
         this.get('csrf').refreshToken();
@@ -36,11 +35,11 @@ export default Ember.Service.extend({
   }),
 
   isAdmin: Ember.computed('user', function () {
-    return (this.get('role').toLowerCase() == 'administrator');
+    return (this.get('user.role').toLowerCase() == 'administrator');
   }),
 
   isUserManager: Ember.computed('user', function () {
-    const role = this.get('role').toLowerCase();
+    const role = this.get('user.role').toLowerCase();
     return (role == 'administrator') || (role == 'user manager');
   }),
 

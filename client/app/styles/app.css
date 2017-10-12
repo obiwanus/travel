@@ -15,7 +15,11 @@ nav.navbar {
 .navbar-item, .navbar-link {
   font-size: 14px;
   line-height: 20px;
-  font-weight: 700;
+}
+
+.navbar-link.active {
+  font-weight: bold;
+  background: #ECF0F3;
 }
 
 /* Alerts */
