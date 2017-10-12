@@ -15,5 +15,6 @@ urlpatterns = [
 
     # Users
     url(r'users/$', auth_views.UserList.as_view(), name='api_users'),
+    url(r'users/(?P<id>[0-9]+)/$', auth_views.UserList.as_view(), name='api_users'),
 
 ]

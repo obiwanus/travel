@@ -16,6 +16,13 @@ export default Ember.Controller.extend({
     return roles;
   }),
 
+  clearForm() {
+    this.set('email', null);
+    this.set('first_name', null);
+    this.set('last_name', null);
+    this.set('role', null);
+  },
+
   actions: {
     selectRole(role) {
       this.set('role', role);
@@ -30,6 +37,7 @@ export default Ember.Controller.extend({
         role: this.get('role'),
       });
       newUser.save().then(() => {
+        this.clearForm();
         this.transitionToRoute('users');
       }).catch((response) => {
         this.set('formErrors', response.errors);

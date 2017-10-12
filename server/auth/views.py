@@ -1,5 +1,6 @@
 from django.middleware import csrf
 from django.contrib import auth
+from django.http import Http404
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -78,6 +79,23 @@ class UserList(APIView):
         user.profile.role = form.cleaned_data['role']
         user.profile.save()
 
-        return Response({}, status=status.HTTP_201_CREATED)
+        serializer = UserS(user)
+        return Response({'user': serializer.data}, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, id):
+        user = User.objects.filter(pk=id).first()
+        if not user:
+            raise Http404
+
+        if user.role == UserProfile.ADMIN and request.user.profile.role != UserProfile.ADMIN:
+            return Response({'errors': ['Insufficient permissions']},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        if user.pk == request.user.pk:
+            return Response({'errors': ['You cannot delete yourself']},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        user.delete()
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
 
 
