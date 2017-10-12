@@ -1,0 +1,65 @@
+<div class="columns">
+  <div class="column"></div>
+  <div class="column is-one-half">
+    <h1 class="title">Add new user</h1>
+
+    <form {{action 'add' on='submit'}}>
+
+      <div class="field">
+        <label class="label">Email</label>
+        <div class="control">
+          {{input class='input' type='email' placeholder='Enter email' value=email}}
+        </div>
+        {{form-errors errors=formErrors for='email'}}
+      </div>
+
+      <div class="field">
+        <label class="label">First name</label>
+        <div class="control">
+          {{input class='input' placeholder='e.g. John' value=first_name}}
+        </div>
+        {{form-errors errors=formErrors for='first_name'}}
+      </div>
+
+      <div class="field">
+        <label class="label">Last name</label>
+        <div class="control">
+          {{input class='input' placeholder='e.g. Smith' value=last_name}}
+        </div>
+        {{form-errors errors=formErrors for='last_name'}}
+      </div>
+
+      <div class="field">
+        <label class="label">Role</label>
+        <div class="select">
+          <select onchange={{action "selectRole" value="target.value"}}>
+            <option disabled selected="selected">--select-role--</option>
+            {{#each availableRoles as |role|}}
+              <option value="{{role}}">{{role}}</option>
+            {{/each}}
+          </select>
+        </div>
+        {{form-errors errors=formErrors for='role'}}
+      </div>
+
+      {{form-errors errors=formErrors for='__all__'}}
+      <div class="field is-grouped">
+        <div class="control">
+          <button type="submit" class="button is-primary">
+            {{#if inProgress}}
+              Adding user...
+            {{else}}
+              Add user
+            {{/if}}
+          </button>
+        </div>
+        <div class="control">
+          {{#link-to 'users' class='button is-link'}}Cancel{{/link-to}}
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+  <div class="column"></div>
+</div>
