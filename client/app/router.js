@@ -11,9 +11,10 @@ Router.map(function() {
   this.route('signup');
   this.route('forgot-password');
   this.route('users', function() {
-    this.route('add');
+    this.route('edit', { path: '/:id' });
   });
   this.route('trips');
+  this.route('error', { path: '*path' });
 });
 
 export default Router;

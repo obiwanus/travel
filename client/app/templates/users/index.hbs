@@ -1,16 +1,4 @@
-<div class="level">
-  <div class="level-left">
-    <h1 class="title">Users</h1>
-  </div>
-  <div class="level-right">
-    {{#link-to 'users.add' class="button is-success"}}
-      <span class="icon is-small">
-        <i class="fa fa-plus"></i>
-      </span>
-      <span>Add User</span>
-    {{/link-to}}
-  </div>
-</div>
+<h1 class="title">Users</h1>
 
 <table class="table is-fullwidth">
   <thead>
@@ -27,16 +15,16 @@
     {{#each model as |u|}}
       <tr>
         <th>{{u.id}}</th>
-        <td><a href="">{{u.email}}</a></td>
+        <td>{{#link-to 'users.edit' u}}{{u.email}}{{/link-to}}</td>
         <td>{{u.first_name}}</td>
         <td>{{u.last_name}}</td>
         <td>{{u.role}}</td>
         <td>
-          <a class="button is-info is-small is-outlined" title="Edit user">
+          {{#link-to 'users.edit' u class='button is-info is-small is-outlined' title='Edit user'}}
             <span class="icon is-small">
               <i class="fa fa-pencil"></i>
             </span>
-          </a>
+          {{/link-to}}
           <a {{action 'delete' u}} class="button is-danger is-small is-outlined" title="Delete user">
             <span class="icon is-small">
               <i class="fa fa-times"></i>

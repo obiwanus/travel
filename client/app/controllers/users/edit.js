@@ -28,7 +28,7 @@ export default Ember.Controller.extend({
       this.set('role', role);
     },
 
-    add() {
+    save() {
       this.set('formErrors', null);
       let newUser = this.get('store').createRecord('user', {
         email: this.get('email'),

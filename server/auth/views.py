@@ -1,6 +1,7 @@
 from django.middleware import csrf
 from django.contrib import auth
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -52,17 +53,28 @@ class CSRFView(APIView):
         return Response({'csrfmiddlewaretoken': csrf.get_token(request)}, status=status.HTTP_200_OK)
 
 
-@permission_classes([IsUserManager])
 class UserList(APIView):
 
-    def get(self, request):
-        users = User.objects.all().select_related('profile')
-        serializer = UserS(users, many=True)
-        return Response({
-            'users': serializer.data,
-        })
+    @permission_classes([IsUserManager])
+    def get(self, request, id=None):
+        if id is None:
+            users = User.objects.all().select_related('profile')
+            serializer = UserS(users, many=True)
+            return Response({
+                'users': serializer.data,
+            })
+        else:
+            user = get_object_or_404(User, id=id)
+            serializer = UserS(user)
+            return Response({
+                'user': serializer.data,
+            })
 
-    def post(self, request):
+
+    @permission_classes([])  # available for anyone
+    def post(self, request, id=None):
+        if id is None:
+            raise Http404
         form = AddUserForm(request.data.get('user', {}), user=request.user)
         if not form.is_valid():
             return Response({'errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)
@@ -82,6 +94,7 @@ class UserList(APIView):
         serializer = UserS(user)
         return Response({'user': serializer.data}, status=status.HTTP_201_CREATED)
 
+    @permission_classes([IsUserManager])
     def delete(self, request, id):
         user = User.objects.filter(pk=id).first()
         if not user:
@@ -97,5 +110,4 @@ class UserList(APIView):
 
         user.delete()
         return Response({}, status=status.HTTP_204_NO_CONTENT)
-
 

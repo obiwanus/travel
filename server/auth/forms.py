@@ -16,7 +16,7 @@ class AddUserForm(forms.Form):
     first_name = forms.CharField(max_length=100, validators=[alphanum])
     last_name = forms.CharField(max_length=100, validators=[alphanum])
     email = forms.EmailField(max_length=255)
-    role = forms.CharField(max_length=15)
+    role = forms.CharField(max_length=15, required=False)
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
@@ -30,8 +30,18 @@ class AddUserForm(forms.Form):
 
     def clean_role(self):
         role = self.cleaned_data['role']
+
+        if not self.user.is_authenticated or self.user.profile.role == UserProfile.USER:
+            # Anyone can create a normal user account
+            role = UserProfile.USER
+
+        if not role:
+            role = UserProfile.USER
+
         if role not in (UserProfile.USER, UserProfile.USER_MANAGER, UserProfile.ADMIN):
             raise forms.ValidationError("Incorrect role specified")
+
         if self.user.profile.role != UserProfile.ADMIN and role == UserProfile.ADMIN:
             raise forms.ValidationError("Insufficient permissions to set this role")
+
         return role
