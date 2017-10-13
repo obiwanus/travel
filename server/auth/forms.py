@@ -12,7 +12,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(max_length=255, widget=forms.PasswordInput, strip=False)
 
 
-class AddUserForm(forms.Form):
+class UserForm(forms.Form):
     first_name = forms.CharField(max_length=100, validators=[alphanum])
     last_name = forms.CharField(max_length=100, validators=[alphanum])
     email = forms.EmailField(max_length=255)
@@ -21,12 +21,6 @@ class AddUserForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
-
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        if User.objects.filter(email__iexact=email):
-            raise forms.ValidationError("User with this email already exists")
-        return email
 
     def clean_role(self):
         role = self.cleaned_data['role']
@@ -45,3 +39,12 @@ class AddUserForm(forms.Form):
             raise forms.ValidationError("Insufficient permissions to set this role")
 
         return role
+
+
+class AddUserForm(UserForm):
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email__iexact=email):
+            raise forms.ValidationError("User with this email already exists")
+        return email

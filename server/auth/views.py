@@ -9,7 +9,7 @@ from rest_framework import status
 from rest_framework.decorators import permission_classes, authentication_classes
 
 from auth.models import User, UserProfile
-from auth.forms import LoginForm, AddUserForm
+from auth.forms import LoginForm, AddUserForm, UserForm
 from auth.serializers import UserS
 from auth.permissions import IsUserManager
 
@@ -95,13 +95,34 @@ class UserList(APIView):
         return Response({'user': serializer.data}, status=status.HTTP_201_CREATED)
 
     @permission_classes([IsUserManager])
+    def put(self, request, id):
+        user = get_object_or_404(User, id=id)
+
+        initial = {
+            'username': user.username,
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'role': user.profile.role,
+        }
+        form = UserForm(request.data.get('user', {}), initial=initial, user=request.user)
+        if not form.is_valid():
+            return Response({'errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.profile.role = form.cleaned_data.pop('role')
+        user.profile.save()
+        user.__dict__.update(form.cleaned_data)
+        user.save()
+
+        serializer = UserS(user)
+        return Response({'user': serializer.data})
+
+    @permission_classes([IsUserManager])
     def delete(self, request, id):
-        user = User.objects.filter(pk=id).first()
-        if not user:
-            raise Http404
+        user = get_object_or_404(User, id=id)
 
         if user.role == UserProfile.ADMIN and request.user.profile.role != UserProfile.ADMIN:
-            return Response({'errors': ['Insufficient permissions']},
+            return Response({'errors': ['Insufficient permissions to delete user']},
                             status=status.HTTP_403_FORBIDDEN)
 
         if user.pk == request.user.pk:
