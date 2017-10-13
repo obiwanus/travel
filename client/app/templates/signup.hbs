@@ -5,48 +5,65 @@
       <div class="column">
         <h1 class="title">Sign up</h1>
 
-        <div class="field">
-          <label class="label">First name</label>
-          <div class="control">
-            <input class="input" type="input" placeholder="Enter your first name">
-          </div>
-        </div>
+        <form {{action 'signup' user on='submit'}}>
 
-        <div class="field">
-          <label class="label">Last name</label>
-          <div class="control">
-            <input class="input" type="input" placeholder="Enter your last name">
+          <div class="field">
+            <label class="label">First name</label>
+            <div class="control">
+              {{input class='input' placeholder='e.g. John' value=user.first_name}}
+            </div>
+            {{form-errors errors=formErrors for='first_name'}}
           </div>
-        </div>
 
-        <div class="field">
-          <label class="label">Email</label>
-          <div class="control has-icons-left has-icons-right">
-            <input class="input" type="email" placeholder="E.g. john.smith@gmail.com">
-            <span class="icon is-small is-left">
-              <i class="fa fa-envelope"></i>
-            </span>
+          <div class="field">
+            <label class="label">Last name</label>
+            <div class="control">
+              {{input class='input' placeholder='e.g. Smith' value=user.last_name}}
+            </div>
+            {{form-errors errors=formErrors for='last_name'}}
           </div>
-        </div>
 
-        <div class="field">
-          <label class="label">Password</label>
-          <div class="control has-icons-left">
-            <input class="input" type="password" placeholder="Password">
-            <span class="icon is-small is-left">
-              <i class="fa fa-lock"></i>
-            </span>
+          <div class="field">
+            <label class="label">Email</label>
+            <div class="control">
+              {{input class='input' type='email' placeholder='Enter email' value=user.email}}
+            </div>
+            {{form-errors errors=formErrors for='email'}}
           </div>
-        </div>
-        <br>
-        <div class="field is-grouped">
-          <div class="control">
-            <button class="button is-primary">Sign up</button>
+
+          <div class="field">
+            <label class="label">Password</label>
+            <div class="control">
+              {{input class='input' type='password' placeholder='Enter password' value=user.password}}
+            </div>
+            <p class="help">Must be longer than 8 characters</p>
+            {{form-errors errors=formErrors for='password'}}
           </div>
-          <div class="control">
-            {{#link-to "index" class="button is-link"}}Cancel{{/link-to}}
+
+          <div class="field">
+            <label class="label">Confirm password</label>
+            <div class="control">
+              {{input class='input' type='password' placeholder='Confirm password' value=confirm_password}}
+            </div>
           </div>
-        </div>
+          <br>
+          {{form-errors errors=formErrors for='__all__'}}
+          <div class="field is-grouped">
+            <div class="control">
+              <button type="submit" class="button is-primary">
+                {{#if inProgress}}
+                  Signing up...
+                {{else}}
+                  Sign up
+                {{/if}}
+              </button>
+            </div>
+            <div class="control">
+              {{#link-to 'index' class='button is-link'}}Cancel{{/link-to}}
+            </div>
+          </div>
+
+        </form>
       </div>
       <div class="column"></div>
     </div>

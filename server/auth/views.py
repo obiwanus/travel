@@ -53,9 +53,9 @@ class CSRFView(APIView):
         return Response({'csrfmiddlewaretoken': csrf.get_token(request)}, status=status.HTTP_200_OK)
 
 
+@permission_classes([IsUserManager])
 class UserList(APIView):
 
-    @permission_classes([IsUserManager])
     def get(self, request, id=None):
         if id is None:
             users = User.objects.all().select_related('profile')
@@ -69,7 +69,6 @@ class UserList(APIView):
             return Response({
                 'user': serializer.data,
             })
-
 
     @permission_classes([])  # available for anyone
     def post(self, request, id=None):
@@ -94,7 +93,6 @@ class UserList(APIView):
         serializer = UserS(user)
         return Response({'user': serializer.data}, status=status.HTTP_201_CREATED)
 
-    @permission_classes([IsUserManager])
     def put(self, request, id):
         user = get_object_or_404(User, id=id)
 
@@ -117,7 +115,6 @@ class UserList(APIView):
         serializer = UserS(user)
         return Response({'user': serializer.data})
 
-    @permission_classes([IsUserManager])
     def delete(self, request, id):
         user = get_object_or_404(User, id=id)
 
