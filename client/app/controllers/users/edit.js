@@ -1,8 +1,12 @@
 import Ember from 'ember';
+import FormMixin from 'client/mixins/form';
 
-export default Ember.Controller.extend({
 
-  messages: Ember.inject.service(),
+export default Ember.Controller.extend(FormMixin, {
+
+  doSubmit(user) {
+    return user.save();
+  },
 
   actions: {
     selectRole(role) {
@@ -10,15 +14,9 @@ export default Ember.Controller.extend({
     },
 
     save(user) {
-      this.set('inProgress', true);
-      this.set('formErrors', null);
-      user.save().then(() => {
+      this.submitForm(user).then(() => {
         this.get('messages').success(this, 'User saved');
         this.transitionToRoute('users');
-      }).catch((response) => {
-        this.set('formErrors', response.errors);
-      }).finally(() => {
-        this.set('inProgress', false);
       });
     },
   },

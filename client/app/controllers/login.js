@@ -1,28 +1,21 @@
 import Ember from 'ember';
+import FormMixin from 'client/mixins/form';
 
-
-export default Ember.Controller.extend({
+export default Ember.Controller.extend(FormMixin, {
   session: Ember.inject.service(),
-  messages: Ember.inject.service(),
+
+  formFields: ['email', 'password'],
+
+  doSubmit() {
+    let { email, password } = this.getProperties('email', 'password');
+    return this.get('session').authenticate('authenticator:django-session', email, password);
+  },
 
   actions: {
     login() {
-      let { email, password } = this.getProperties('email', 'password');
-      this.set('inProgress', true);
-      this.get('session').authenticate('authenticator:django-session', email, password).then(() => {
-        this.set('formErrors');
+      this.submitForm().then(() => {
+        this.clearForm();
         this.transitionToRoute('index');
-      }).catch((xhr) => {
-        const errors = (xhr.responseJSON && xhr.responseJSON.errors) || ["Unable to contact the server"];
-        if (Array.isArray(errors)) {
-          errors.forEach((error) => {
-            this.get('messages').error(this, error);
-          });
-        } else {
-          this.set('formErrors', errors);
-        }
-      }).finally(() => {
-        this.set('inProgress', false);
       });
     },
   },

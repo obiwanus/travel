@@ -20,7 +20,7 @@ export default Ember.Controller.extend(FormMixin, {
   }),
 
   disableSubmit: Ember.computed('password', 'password_confirm', function () {
-    if (this.get('isSubmitting')) return true;
+    if (this.get('inProgress')) return true;
     if (!this.password || !this.password_confirm) return true;
     return this.password.length < this.minPasswordLength ||
            this.password !== this.password_confirm;

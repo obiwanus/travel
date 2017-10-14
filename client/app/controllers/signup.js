@@ -1,26 +1,24 @@
 import Ember from 'ember';
+import FormMixin from 'client/mixins/form';
 
-export default Ember.Controller.extend({
-
-  messages: Ember.inject.service(),
+export default Ember.Controller.extend(FormMixin, {
 
   user: {},
+
+  doSubmit(user) {
+    return user.save();
+  },
 
   actions: {
 
     signup(userData) {
-      this.set('inProgress', true);
-      this.set('formErrors', null);
       let user = this.get('store').createRecord('user', userData);
-      user.save().then(() => {
+      this.submitForm(user).then(() => {
         this.get('messages').success(this, "Your account has been created. Please check your email");
         this.set('user', {});  // clear form
         this.transitionToRoute('login');
-      }).catch((response) => {
-        this.set('formErrors', response.errors);
+      }).catch(() => {
         user.deleteRecord();
-      }).finally(() => {
-        this.set('inProgress', false);
       });
     },
   },

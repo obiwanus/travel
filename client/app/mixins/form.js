@@ -20,18 +20,22 @@ export default Ember.Mixin.create({
     }
   },
 
-  submitForm(url, data, type) {
+  doSubmit(url, data, type) {
+    // Default submitter
     if (type === undefined) {
       type = 'POST';
     }
+    return this.get('ajax').sendData(url, data, type);
+  },
 
+  submitForm() {
     return new Ember.RSVP.Promise((resolve, reject) => {
       this.set('inProgress', true);
-      this.get('ajax').sendData(url, data, type).then((response) => {
+      this.doSubmit(...arguments).then((response) => {
         this.displayMessages(response.success, 'success');
         resolve(response);
       }).catch((xhr) => {
-        const response = xhr.responseJSON;
+        const response = xhr.responseJSON || xhr;
         if (!response || !response.errors) {
           // TODO: if CSRF is missing, need to refresh the page
           if (xhr.status && xhr.status > 299) {
