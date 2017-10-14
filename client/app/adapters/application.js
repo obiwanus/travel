@@ -19,7 +19,7 @@ export default DS.RESTAdapter.extend({
     };
   }),
 
-  buildURL(modelName, id, snapshot, requestType, query) {
+  buildURL() {
     let url = this._super(...arguments);
     if (url.charAt(url.length - 1) !== '/') {
       url += '/';

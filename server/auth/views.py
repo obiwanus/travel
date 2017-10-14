@@ -1,7 +1,10 @@
 from django.middleware import csrf
-from django.contrib import auth
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django.contrib import auth
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_text
+from django.utils.http import urlsafe_base64_decode
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,7 +12,7 @@ from rest_framework import status
 from rest_framework.decorators import permission_classes, authentication_classes
 
 from auth.models import User, UserProfile
-from auth.forms import LoginForm, AddUserForm, UserForm
+from auth.forms import LoginForm, AddUserForm, UserForm, PasswordResetForm, PasswordConfirmForm
 from auth.serializers import UserS
 from auth.permissions import IsUserManager
 
@@ -89,6 +92,17 @@ class UserList(APIView):
         user.profile.role = form.cleaned_data['role']
         user.profile.save()
 
+        # Send password reset email
+        reset_form = PasswordResetForm({'email': user.email})
+        if reset_form.is_valid():
+            reset_form.save(
+                use_https=request.stream.is_secure(),
+                domain_override='localhost:4200',
+                from_email='travel-planner@gmail.com',
+                email_template_name='auth/password_email.html',
+                subject_template_name='auth/password_subject.txt',
+            )
+
         serializer = UserS(user)
         return Response({'user': serializer.data}, status=status.HTTP_201_CREATED)
 
@@ -128,3 +142,56 @@ class UserList(APIView):
         user.delete()
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
+
+@permission_classes([])
+class PasswordResetConfirmView(APIView):
+
+    error_link_is_invalid = ("The password reset link was invalid, possibly because it "
+                             "has already been used. Please request a new password reset.")
+
+    def _get_user_from_reset_link(self, uidb64, token):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+            UserProfile.objects.update_or_create(user=user)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is None or not default_token_generator.check_token(user, token):
+            return None
+        else:
+            return user
+
+    def get(self, request, uidb64, token):
+        """
+        Allows the frontend app to find out whether the reset link is valid
+        """
+        if self._get_user_from_reset_link(uidb64, token) is not None:
+            return Response({'valid': 'true'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'valid': 'false', 'error': self.error_link_is_invalid},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request, uidb64, token):
+        """
+        Changes user's password provided the uid and token are correct
+        """
+        user = self._get_user_from_reset_link(uidb64, token)
+        if not user:
+            return Response({'errors': {'__all__': [self.error_link_is_invalid]}},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        form = PasswordConfirmForm(request.data)
+        if not form.is_valid():
+            return Response({'errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Change password - this will make the link invalid
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+        except Exception:
+            return Response({'errors': {'__all__': ['Server error. Please contact system administrator']}},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response({'success': ["Password has been set successfully"]},
+                        status=status.HTTP_200_OK)

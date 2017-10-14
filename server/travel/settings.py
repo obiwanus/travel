@@ -72,7 +72,7 @@ ROOT_URLCONF = 'travel.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -122,6 +122,8 @@ AUTHENTICATION_BACKENDS = [
 
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # for development
 
 
 # Internationalization

@@ -9,11 +9,12 @@ const Router = Ember.Router.extend({
 Router.map(function() {
   this.route('login');
   this.route('signup');
-  this.route('forgot-password');
   this.route('users', function() {
     this.route('edit', { path: '/:id' });
   });
   this.route('trips');
+  this.route('password-request');
+  this.route('password-set', { path: 'password/set/:b64Uid/:token/' });
   this.route('error', { path: '*path' });
 });
 

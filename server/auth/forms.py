@@ -1,5 +1,6 @@
 from django import forms
 from django.core.validators import RegexValidator
+from django.contrib.auth.forms import PasswordResetForm as DjangoPasswordResetForm
 
 from auth.models import User, UserProfile
 
@@ -48,3 +49,20 @@ class AddUserForm(UserForm):
         if User.objects.filter(email__iexact=email):
             raise forms.ValidationError("User with this email already exists")
         return email
+
+
+class PasswordResetForm(DjangoPasswordResetForm):
+
+    def get_users(self, email):
+        # Ignores whether user has usable password or not
+        return User.objects.filter(email__iexact=email)
+
+
+class PasswordConfirmForm(forms.Form):
+    password = forms.CharField(max_length=100, widget=forms.PasswordInput)
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if not password or len(password) < 8:
+            raise forms.ValidationError("Password must be 8 or more characters long")
+        return password
