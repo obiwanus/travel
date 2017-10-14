@@ -56,6 +56,19 @@ class CSRFView(APIView):
         return Response({'csrfmiddlewaretoken': csrf.get_token(request)}, status=status.HTTP_200_OK)
 
 
+def reset_password_for(email):
+    reset_form = PasswordResetForm({'email': email})
+    if reset_form.is_valid():
+        reset_form.save(
+            use_https=False,
+            domain_override='localhost:4200',
+            from_email='travel-planner@gmail.com',
+            email_template_name='auth/password_email.html',
+            subject_template_name='auth/password_subject.txt',
+        )
+    return reset_form
+
+
 @permission_classes([IsUserManager])
 class UserList(APIView):
 
@@ -92,16 +105,8 @@ class UserList(APIView):
         user.profile.role = form.cleaned_data['role']
         user.profile.save()
 
-        # Send password reset email
-        reset_form = PasswordResetForm({'email': user.email})
-        if reset_form.is_valid():
-            reset_form.save(
-                use_https=request.stream.is_secure(),
-                domain_override='localhost:4200',
-                from_email='travel-planner@gmail.com',
-                email_template_name='auth/password_email.html',
-                subject_template_name='auth/password_subject.txt',
-            )
+        # Send password set email
+        reset_password_for(user.email)
 
         serializer = UserS(user)
         return Response({'user': serializer.data}, status=status.HTTP_201_CREATED)
@@ -141,6 +146,20 @@ class UserList(APIView):
 
         user.delete()
         return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+
+@permission_classes([])
+class PasswordResetView(APIView):
+
+    def post(self, request):
+
+        form = reset_password_for(request.data.get('email'))
+        if not form.is_valid():
+            return Response({'errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({'success': "Email with a password reset link "
+                                    "has been sent to your email address. "
+                                    "Please check your email."})
 
 
 @permission_classes([])
