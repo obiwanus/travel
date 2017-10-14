@@ -6,6 +6,10 @@ class IsUserManager(BasePermission):
 
     def has_permission(self, request, view):
 
+        if request.method in ['POST', 'OPTIONS']:
+            return True  # Anyone can sign up
+
+        # To PUT and GET user must have permissions
         if not request.user.is_authenticated():
             return False
 

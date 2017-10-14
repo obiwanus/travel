@@ -25,17 +25,17 @@ class UserForm(forms.Form):
     def clean_role(self):
         role = self.cleaned_data['role']
 
-        if not self.user.is_authenticated or self.user.profile.role == UserProfile.USER:
+        if not role or not self.user.is_authenticated or self.user.profile.role == UserProfile.USER:
             # Anyone can create a normal user account
-            role = UserProfile.USER
-
-        if not role:
             role = UserProfile.USER
 
         if role not in (UserProfile.USER, UserProfile.USER_MANAGER, UserProfile.ADMIN):
             raise forms.ValidationError("Incorrect role specified")
 
-        if self.user.profile.role != UserProfile.ADMIN and role == UserProfile.ADMIN:
+        if role == UserProfile.ADMIN and (
+                not self.user.is_authenticated or
+                self.user.profile.role != UserProfile.ADMIN
+            ):
             raise forms.ValidationError("Insufficient permissions to set this role")
 
         return role

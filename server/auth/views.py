@@ -58,7 +58,7 @@ class UserList(APIView):
 
     def get(self, request, id=None):
         if id is None:
-            users = User.objects.all().select_related('profile')
+            users = User.objects.all().select_related('profile').order_by('id')
             serializer = UserS(users, many=True)
             return Response({
                 'users': serializer.data,
@@ -70,9 +70,8 @@ class UserList(APIView):
                 'user': serializer.data,
             })
 
-    @permission_classes([])  # available for anyone
     def post(self, request, id=None):
-        if id is None:
+        if id is not None:
             raise Http404
         form = AddUserForm(request.data.get('user', {}), user=request.user)
         if not form.is_valid():

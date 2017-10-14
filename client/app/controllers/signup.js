@@ -7,18 +7,18 @@ export default Ember.Controller.extend({
   user: {},
 
   actions: {
-    selectRole(role) {
-      this.set('user.role', role);
-    },
 
-    save(user) {
+    signup(userData) {
       this.set('inProgress', true);
       this.set('formErrors', null);
-      user.save().then(() => {
-        this.get('messages').success(this, 'User saved');
-        this.transitionToRoute('users');
+      let user = this.get('store').createRecord('user', userData);
+      user.save().then((response) => {
+        this.get('messages').success(this, "Your account has been created. Please check your email");
+        this.set('user', {});  // clear form
+        this.transitionToRoute('login');
       }).catch((response) => {
         this.set('formErrors', response.errors);
+        user.deleteRecord();
       }).finally(() => {
         this.set('inProgress', false);
       });
