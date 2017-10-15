@@ -16,6 +16,8 @@ export default Ember.Controller.extend(FormMixin, {
       this.submitForm().then(() => {
         this.clearForm();
         this.transitionToRoute('index');
+      }).catch(() => {
+        // ignore
       });
     },
   },

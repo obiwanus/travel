@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
 from auth import views as auth_views
+from trips import views as trip_views
 
 
 urlpatterns = [
@@ -21,5 +22,8 @@ urlpatterns = [
     url(r'password/reset/$', auth_views.PasswordResetView.as_view()),
     url(r'password/set/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         auth_views.PasswordResetConfirmView.as_view()),
+
+    # Trips
+    url(r'trips/$', trip_views.TripList.as_view(), name='api_trips'),
 
 ]

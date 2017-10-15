@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'auth.apps.AuthConfig',
+    'trips',
 ]
 
 MIDDLEWARE = [

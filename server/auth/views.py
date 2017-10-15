@@ -1,6 +1,5 @@
 from django.middleware import csrf
 from django.http import Http404
-from django.shortcuts import get_object_or_404
 from django.contrib import auth
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_text
