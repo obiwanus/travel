@@ -15,7 +15,7 @@ test('Can login as normal user', function(assert) {
   loginAs('normal user');
 
   andThen(function() {
-    assert.equal(currentURL(), '/trips');
+    assert.equal(currentURL(), '/trips/upcoming');
   });
 });
 
@@ -23,7 +23,7 @@ test('Can login as user manager', function(assert) {
   loginAs('user manager');
 
   andThen(function() {
-    assert.equal(currentURL(), '/trips');
+    assert.equal(currentURL(), '/trips/upcoming');
   });
 });
 
@@ -31,7 +31,7 @@ test('Can login as admin user', function(assert) {
   loginAs('admin');
 
   andThen(function() {
-    assert.equal(currentURL(), '/trips');
+    assert.equal(currentURL(), '/trips/upcoming');
   });
 });
 

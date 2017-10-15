@@ -18,7 +18,7 @@
 <div class="field">
   <label class="label">End date</label>
   <div class="control">
-    {{pikaday-input class='input' placeholder='When are you back?' value=trip.end_date minDate=minEndDate}}
+    {{pikaday-input value=trip.end_date minDate=minEndDate onSelection=(action 'setEndDate') class='input' placeholder='When are you back?'}}
   </div>
   {{form-errors errors=formErrors for='end_date'}}
 </div>

@@ -17,7 +17,7 @@ class TripList(APIView):
         return Response({'trips': serializer.data})
 
     def post(self, request):
-        form = TripForm(request.data)
+        form = TripForm(request.data.get('trip'))
         if not form.is_valid():
             return Response({'errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)
         new_trip = form.save(commit=False)

@@ -6,5 +6,5 @@ class TripS(serializers.ModelSerializer):
 
     class Meta:
         model = Trip
-        fields = ('__all__',)
-        depth = 1
+        fields = '__all__'
+        depth = 0

@@ -16,6 +16,11 @@ export default Ember.Component.extend({
 
     setStartDate(date) {
       this.set('minEndDate', date);
+      this.set('trip.start_date', date);
+    },
+
+    setEndDate(date) {
+      this.set('trip.end_date', date);
     },
 
   },
