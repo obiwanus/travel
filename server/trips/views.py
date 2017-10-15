@@ -12,9 +12,7 @@ from trips.forms import TripForm
 class TripList(APIView):
 
     def get(self, request):
-        trips = Trip.objects.order_by('start_date')
-        if request.user.profile.role != UserProfile.ADMIN:
-            trips = trips.filter(user=request.user)
+        trips = Trip.objects.filter(user=request.user).order_by('start_date')
         serializer = TripS(trips, many=True)
         return Response({'trips': serializer.data})
 

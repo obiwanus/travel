@@ -12,7 +12,9 @@ Router.map(function() {
   this.route('users', function() {
     this.route('edit', { path: '/:id' });
   });
-  this.route('trips');
+  this.route('trips', function() {
+    this.route('edit');
+  });
   this.route('password-request');
   this.route('password-set', { path: 'password/set/:b64Uid/:token/' });
   this.route('error', { path: '*path' });
