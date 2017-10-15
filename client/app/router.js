@@ -14,6 +14,10 @@ Router.map(function() {
   });
   this.route('trips', function() {
     this.route('edit');
+    this.route('upcoming');
+    this.route('past');
+    this.route('plan');
+    this.route('add');
   });
   this.route('password-request');
   this.route('password-set', { path: 'password/set/:b64Uid/:token/' });

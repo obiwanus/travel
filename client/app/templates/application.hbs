@@ -9,9 +9,11 @@
       <div class="navbar-end">
         {{#if user.isAuthenticated}}
           <div class="navbar-item">Hi {{user.name}}</div>
-          {{#link-to 'trips' class="navbar-link"}}My trips{{/link-to}}
+          {{#link-to 'trips.upcoming' class="navbar-link"}}Upcoming trips{{/link-to}}
+          {{#link-to 'trips.past' class="navbar-link"}}Past trips{{/link-to}}
+          {{#link-to 'trips.plan' class="navbar-link"}}Next month{{/link-to}}
           {{#if user.isAdmin}}
-            <a class="navbar-link">All trips</a>
+            <a class="navbar-link">All user trips</a>
           {{/if}}
           {{#if user.isUserManager}}
             {{#link-to 'users' class="navbar-link"}}Users{{/link-to}}

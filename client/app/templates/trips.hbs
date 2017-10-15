@@ -1,1 +1,17 @@
+<div class="level">
+  <div class="level-left">
+    <h2 class="title is-4">{{title}}</h2>
+  </div>
+  {{#unless noAddButton}}
+    <div class="level-right">
+      {{#link-to 'trips.add' class='button is-success'}}
+        <span class="icon is-small">
+          <i class="fa fa-plus"></i>
+        </span>
+        <span>Add new trip</span>
+      {{/link-to}}
+    </div>
+  {{/unless}}
+</div>
+
 {{outlet}}

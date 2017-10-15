@@ -1,0 +1,48 @@
+
+<div class="field">
+  <label class="label">Destination</label>
+  <div class="control">
+    {{input class='input' placeholder='Where are you going?' value=trip.destination}}
+  </div>
+  {{form-errors errors=formErrors for='destination'}}
+</div>
+
+<div class="field">
+  <label class="label">Start date</label>
+  <div class="control">
+    {{pikaday-input value=trip.start_date minDate=minStartDate onSelection=(action 'setStartDate') class='input' placeholder='When?'}}
+  </div>
+  {{form-errors errors=formErrors for='start_date'}}
+</div>
+
+<div class="field">
+  <label class="label">End date</label>
+  <div class="control">
+    {{pikaday-input class='input' placeholder='When are you back?' value=trip.end_date minDate=minEndDate}}
+  </div>
+  {{form-errors errors=formErrors for='end_date'}}
+</div>
+
+<div class="field">
+  <label class="label">Comment</label>
+  <div class="control">
+    {{textarea class='textarea' placeholder='e.g. Do not forget your umbrella!' value=trip.comment}}
+  </div>
+  {{form-errors errors=formErrors for='comment'}}
+</div>
+
+<div class="field is-grouped">
+  <div class="control">
+    <button type="submit" class="button is-primary">
+      {{#if inProgress}}
+        Saving trip...
+      {{else}}
+        Save trip
+      {{/if}}
+    </button>
+  </div>
+  <div class="control">
+    {{#link-to 'index' class='button is-link'}}Cancel{{/link-to}}
+  </div>
+</div>
+
