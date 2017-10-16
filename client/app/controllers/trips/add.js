@@ -12,7 +12,6 @@ export default Ember.Controller.extend(FormMixin, {
   actions: {
 
     save(tripData) {
-      debugger;
       let trip = this.get('store').createRecord('trip', tripData);
       this.submitForm(trip).then(() => {
         this.get('messages').success(this, 'Trip has been added');

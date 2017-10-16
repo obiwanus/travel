@@ -13,13 +13,14 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     },
 
     model() {
-        return this.get('store').findAll('trip');
+      return this.get('store').findAll('trip');
     },
 
     setupController() {
-      const controller = this.controllerFor('trips');
-      controller.set('title', this.get('title'));
-      controller.set('noAddButton', this.get('noAddButton'));
+      this._super(...arguments);
+      const parent = this.controllerFor('trips');
+      parent.set('title', this.get('title'));
+      parent.set('noAddButton', this.get('noAddButton'));
     },
 
 });
