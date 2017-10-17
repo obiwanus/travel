@@ -15,6 +15,7 @@ export default Ember.Controller.extend(FormMixin, {
       let trip = this.get('store').createRecord('trip', tripData);
       this.submitForm(trip).then(() => {
         this.get('messages').success(this, 'Trip has been added');
+        this.set('trip', {});  // clear form
         this.transitionToRoute('trips');
       }).catch(() => {
         trip.deleteRecord();

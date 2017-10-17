@@ -31,18 +31,5 @@
   {{form-errors errors=formErrors for='comment'}}
 </div>
 
-<div class="field is-grouped">
-  <div class="control">
-    <button type="submit" class="button is-primary">
-      {{#if inProgress}}
-        Saving trip...
-      {{else}}
-        Save trip
-      {{/if}}
-    </button>
-  </div>
-  <div class="control">
-    {{#link-to 'index' class='button is-link'}}Cancel{{/link-to}}
-  </div>
-</div>
+
 

@@ -3,7 +3,24 @@
 <div class="columns">
   <div class="column">
     <form {{action 'save' trip on='submit'}}>
+
       {{trip-form trip=trip formErrors=formErrors}}
+
+      <br>
+      <div class="field is-grouped">
+        <div class="control">
+          <button type="submit" class="button is-primary">
+            {{#if inProgress}}
+              Saving trip...
+            {{else}}
+              Save trip
+            {{/if}}
+          </button>
+        </div>
+        <div class="control">
+          {{#link-to 'index' class='button is-link'}}Cancel{{/link-to}}
+        </div>
+      </div>
     </form>
   </div>
   <div class="column"></div>

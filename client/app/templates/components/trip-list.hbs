@@ -5,41 +5,35 @@
 
   <div class="level-right">
     <p class="control has-icons-right">
-      <input class="input" type="text" placeholder="Filter trips">
+      {{input class='input' value=filter placeholder='Filter trips'}}
       <span class="icon is-small is-right">
         <i class="fa fa-search"></i>
       </span>
     </p>
-
-    {{#unless noAddButton}}
-      &nbsp;&nbsp;
-      {{#link-to 'trips.add' class='button is-success'}}
-        <span class="icon is-small">
-          <i class="fa fa-plus"></i>
-        </span>
-        <span>Add new trip</span>
-      {{/link-to}}
-    {{/unless}}
+    &nbsp;&nbsp;
+    {{#link-to 'trips.add' class='button is-success'}}
+      <span class="icon is-small">
+        <i class="fa fa-plus"></i>
+      </span>
+      <span>Add new trip</span>
+    {{/link-to}}
   </div>
 </div>
 
-{{#each trips as |trip|}}
+{{#each filteredTrips as |trip|}}
 
   <div class="box">
     <article class="media">
       <div class="media-content">
         <div class="level">
-          <div class="level-left" style="width: 45%">
+          <div class="level-left" style="width: 55%">
             <b>To:</b> &nbsp; {{trip.destination}}
           </div>
           <div class="level-item">
-            <b>When:</b> &nbsp; {{trip.start_date}}
-          </div>
-          <div class="level-item">
-            <b>Back:</b> &nbsp; {{trip.end_date}}
+            <b>When:</b> &nbsp; {{trip.start}} &nbsp;{{#if trip.when}}({{trip.when}}){{/if}}
           </div>
           <div class="level-right">
-            <b>Days to go:</b> &nbsp;???
+            <b>Back:</b> &nbsp; {{trip.end}}
           </div>
         </div>
       </div>

@@ -8,7 +8,7 @@ export default DS.Transform.extend({
 
   serialize(deserialized) {
     if (deserialized) {
-      return moment.utc(deserialized).format("YYYY-MM-DD")
+      return moment(deserialized).format("YYYY-MM-DD")
     } else {
       return deserialized;
     }
