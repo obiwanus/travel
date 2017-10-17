@@ -1,0 +1,59 @@
+<div class="level">
+  <div class="level-left">
+    <h2 class="title is-4">{{title}}</h2>
+  </div>
+
+  <div class="level-right">
+    <p class="control has-icons-right">
+      <input class="input" type="text" placeholder="Filter trips">
+      <span class="icon is-small is-right">
+        <i class="fa fa-search"></i>
+      </span>
+    </p>
+
+    {{#unless noAddButton}}
+      &nbsp;&nbsp;
+      {{#link-to 'trips.add' class='button is-success'}}
+        <span class="icon is-small">
+          <i class="fa fa-plus"></i>
+        </span>
+        <span>Add new trip</span>
+      {{/link-to}}
+    {{/unless}}
+  </div>
+</div>
+
+{{#each trips as |trip|}}
+
+  <div class="box">
+    <article class="media">
+      <div class="media-content">
+        <div class="level">
+          <div class="level-left" style="width: 45%">
+            <b>To:</b> &nbsp; {{trip.destination}}
+          </div>
+          <div class="level-item">
+            <b>When:</b> &nbsp; {{trip.start_date}}
+          </div>
+          <div class="level-item">
+            <b>Back:</b> &nbsp; {{trip.end_date}}
+          </div>
+          <div class="level-right">
+            <b>Days to go:</b> &nbsp;???
+          </div>
+        </div>
+      </div>
+      <div class="media-right">
+        <a class='button is-info is-small is-outlined' title='Edit trip'>
+          <span class="icon is-small">
+            <i class="fa fa-pencil"></i>
+          </span>
+        </a>
+      </div>
+    </article>
+    <small>
+      {{trip.comment}}
+    </small>
+  </div>
+
+{{/each}}
