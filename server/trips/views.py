@@ -25,3 +25,26 @@ class TripList(APIView):
         new_trip.save()
         serializer = TripS(new_trip)
         return Response({'trip': serializer.data}, status=status.HTTP_201_CREATED)
+
+
+
+class TripDetail(APIView):
+
+    def get(self, request, id):
+        trips = Trip.objects.filter(id=id).first()
+        # TODO: check user permissions
+
+
+
+        serializer = TripS(trips, many=True)
+        return Response({'trips': serializer.data})
+
+    def post(self, request):
+        form = TripForm(request.data.get('trip'))
+        if not form.is_valid():
+            return Response({'errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)
+        new_trip = form.save(commit=False)
+        new_trip.user = request.user
+        new_trip.save()
+        serializer = TripS(new_trip)
+        return Response({'trip': serializer.data}, status=status.HTTP_201_CREATED)

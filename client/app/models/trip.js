@@ -4,6 +4,7 @@ import moment from 'moment';
 
 let today_start = moment().startOf('day');
 let today_end = moment().endOf('day');
+let month_end = moment().endOf('day').add(1, 'months');
 
 export default DS.Model.extend({
   destination: DS.attr('string'),
@@ -21,6 +22,11 @@ export default DS.Model.extend({
 
   isPast: Ember.computed('start_date', function () {
     return moment(this.get('start_date')) < today_start;
+  }),
+
+  isWithinNextMonth: Ember.computed('start_date', function () {
+    let start = moment(this.get('start_date'));
+    return today_start <= start && start <= month_end;
   }),
 
   start: Ember.computed('start_date', function () {

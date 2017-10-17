@@ -25,5 +25,6 @@ urlpatterns = [
 
     # Trips
     url(r'trips/$', trip_views.TripList.as_view(), name='api_trips'),
+    url(r'trips/(?P<id>[0-9]+)/$', trip_views.TripDetail.as_view(), name='api_trip'),
 
 ]

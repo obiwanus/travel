@@ -30,6 +30,10 @@ export default Ember.Service.extend({
     return fullName;
   }),
 
+  role: Ember.computed('user', function () {
+    return this.get('user.role');
+  }),
+
   isAuthenticated: Ember.computed('user', function () {
     return this.get('session.session.isAuthenticated');
   }),

@@ -8,7 +8,7 @@
     <div class="navbar-menu">
       <div class="navbar-end">
         {{#if user.isAuthenticated}}
-          <div class="navbar-item">Hi {{user.name}}</div>
+          <div class="navbar-item">Hi {{user.name}} ({{user.role}})</div>
           {{#link-to 'trips.upcoming' class="navbar-link"}}Upcoming trips{{/link-to}}
           {{#link-to 'trips.past' class="navbar-link"}}Past trips{{/link-to}}
           {{#link-to 'trips.plan' class="navbar-link"}}Next month{{/link-to}}

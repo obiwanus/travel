@@ -13,7 +13,7 @@ Router.map(function() {
     this.route('edit', { path: '/:id' });
   });
   this.route('trips', function() {
-    this.route('edit');
+    this.route('edit', { path: '/:id' });
     this.route('upcoming');
     this.route('past');
     this.route('plan');

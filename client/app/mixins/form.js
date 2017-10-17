@@ -31,6 +31,7 @@ export default Ember.Mixin.create({
   submitForm() {
     return new Ember.RSVP.Promise((resolve, reject) => {
       this.set('inProgress', true);
+      this.set('formErrors', {});
       this.doSubmit(...arguments).then((response) => {
         this.displayMessages(response.success, 'success');
         resolve(response);

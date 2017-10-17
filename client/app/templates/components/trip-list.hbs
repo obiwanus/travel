@@ -38,16 +38,27 @@
         </div>
       </div>
       <div class="media-right">
-        <a class='button is-info is-small is-outlined' title='Edit trip'>
+        {{#link-to 'trips.edit' trip class='button is-info is-small is-outlined' title='Edit trip'}}
           <span class="icon is-small">
             <i class="fa fa-pencil"></i>
           </span>
-        </a>
+        {{/link-to}}
       </div>
     </article>
     <small>
       {{trip.comment}}
     </small>
+  </div>
+
+{{else}}
+
+  <div class="box">
+    No trips found
+
+    {{#unless filter}}
+      <br><br>
+      {{#link-to 'trips.add'}}Click here to add a trip{{/link-to}}
+    {{/unless}}
   </div>
 
 {{/each}}
