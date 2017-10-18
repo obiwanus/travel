@@ -18,6 +18,7 @@ Router.map(function() {
     this.route('past');
     this.route('plan');
     this.route('add');
+    this.route('all');
   });
   this.route('password-request');
   this.route('password-set', { path: 'password/set/:b64Uid/:token/' });

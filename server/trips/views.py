@@ -15,8 +15,10 @@ from trips.forms import TripForm
 class TripList(APIView):
 
     def get(self, request):
-        trips = Trip.objects.filter(user=request.user).order_by('start_date')
-        serializer = TripS(trips, many=True)
+        trips = Trip.objects.filter(user=request.user)
+        if request.query_params.get('all') and request.user.profile.role == UserProfile.ADMIN:
+            trips = Trip.objects.all().order_by('user')
+        serializer = TripS(trips.order_by('start_date'), many=True)
         return Response({'trips': serializer.data})
 
     def post(self, request):

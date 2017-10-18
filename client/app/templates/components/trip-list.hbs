@@ -20,45 +20,88 @@
   </div>
 </div>
 
-{{#each filteredTrips as |trip|}}
+{{#unless asTable}}
 
-  <div class="box">
-    <article class="media">
-      <div class="media-content">
-        <div class="level">
-          <div class="level-left" style="width: 55%">
-            <b>To:</b> &nbsp; {{trip.destination}}
-          </div>
-          <div class="level-item">
-            <b>When:</b> &nbsp; {{trip.start}} &nbsp;{{#if trip.when}}({{trip.when}}){{/if}}
-          </div>
-          <div class="level-right">
-            <b>Back:</b> &nbsp; {{trip.end}}
+  {{#each filteredTrips as |trip|}}
+
+    <div class="box">
+      <article class="media">
+        <div class="media-content">
+          <div class="level">
+            <div class="level-left" style="width: 55%">
+              <b>To:</b> &nbsp; {{trip.destination}}
+            </div>
+            <div class="level-item">
+              <b>When:</b> &nbsp; {{trip.start}} &nbsp;{{#if trip.when}}({{trip.when}}){{/if}}
+            </div>
+            {{#if showUser}}
+              <div class="level-right">
+                <b>User:</b> &nbsp; {{trip.user.full_name}}
+              </div>
+            {{else}}
+              <div class="level-right">
+                <b>Back:</b> &nbsp; {{trip.end}}
+              </div>
+            {{/if}}
           </div>
         </div>
-      </div>
-      <div class="media-right">
-        {{#link-to 'trips.edit' trip class='button is-info is-small is-outlined' title='Edit trip'}}
-          <span class="icon is-small">
-            <i class="fa fa-pencil"></i>
-          </span>
-        {{/link-to}}
-      </div>
-    </article>
-    <small>
-      {{trip.comment}}
-    </small>
-  </div>
+        <div class="media-right">
+          {{#link-to 'trips.edit' trip class='button is-info is-small is-outlined' title='Edit trip'}}
+            <span class="icon is-small">
+              <i class="fa fa-pencil"></i>
+            </span>
+          {{/link-to}}
+        </div>
+      </article>
+      <small>
+        {{trip.comment}}
+      </small>
+    </div>
+
+  {{else}}
+
+    <div class="box">
+      No trips found
+
+      {{#unless filter}}
+        <br><br>
+        {{#link-to 'trips.add'}}Click here to add a trip{{/link-to}}
+      {{/unless}}
+    </div>
+
+  {{/each}}
 
 {{else}}
 
-  <div class="box">
-    No trips found
+  <table class="table is-fullwidth">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Destination</th>
+        <th>When</th>
+        <th>Back</th>
+        <th>User</th>
+        <th width="90"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each filteredTrips as |trip|}}
+        <tr>
+          <th>{{trip.id}}</th>
+          <td>{{#link-to 'trips.edit' trip}}{{trip.destination}}{{/link-to}}</td>
+          <td>{{trip.start}}</td>
+          <td>{{trip.end}}</td>
+          <td>{{trip.user.email}}</td>
+          <td>
+            {{#link-to 'trips.edit' trip class='button is-info is-small is-outlined' title='Edit trip'}}
+              <span class="icon is-small">
+                <i class="fa fa-pencil"></i>
+              </span>
+            {{/link-to}}
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
 
-    {{#unless filter}}
-      <br><br>
-      {{#link-to 'trips.add'}}Click here to add a trip{{/link-to}}
-    {{/unless}}
-  </div>
-
-{{/each}}
+{{/unless}}

@@ -13,7 +13,7 @@
           {{#link-to 'trips.past' class="navbar-link"}}Past trips{{/link-to}}
           {{#link-to 'trips.plan' class="navbar-link"}}Next month{{/link-to}}
           {{#if user.isAdmin}}
-            <a class="navbar-link">All user trips</a>
+            {{#link-to 'trips.all' class="navbar-link"}}All user trips{{/link-to}}
           {{/if}}
           {{#if user.isUserManager}}
             {{#link-to 'users' class="navbar-link"}}Users{{/link-to}}
