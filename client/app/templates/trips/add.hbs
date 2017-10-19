@@ -10,15 +10,20 @@
       <div class="field is-grouped">
         <div class="control">
           <button type="submit" class="button is-primary">
-            {{#if inProgress}}
-              Saving trip...
-            {{else}}
-              Save trip
-            {{/if}}
+            <span class="icon is-small">
+              <i class="fa fa-check"></i>
+            </span>
+            <span>
+              {{#if inProgress}}
+                Saving trip...
+              {{else}}
+                Save trip
+              {{/if}}
+            </span>
           </button>
         </div>
         <div class="control">
-          {{#link-to 'index' class='button is-link'}}Cancel{{/link-to}}
+          <button {{action "back"}} class='button is-link'>Cancel</button>
         </div>
       </div>
     </form>

@@ -30,6 +30,10 @@ export default Ember.Service.extend({
     return fullName;
   }),
 
+  id: Ember.computed('user', function () {
+    return this.get('user.id');
+  }),
+
   role: Ember.computed('user', function () {
     return this.get('user.role');
   }),

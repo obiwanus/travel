@@ -5,11 +5,13 @@ export default Ember.Component.extend({
   filter: '',
 
   filterFunction: Ember.computed('trips', 'dateFilter', 'filter', function () {
-    let dateFilter = (trip) => !trip.get('isPast');
+    let dateFilter = (trip) => true;  // no filter
     if (this.get('dateFilter') === 'past') {
       dateFilter = (trip) => trip.get('isPast');
     } else if (this.get('dateFilter') === 'next_month') {
       dateFilter = (trip) => trip.get('isWithinNextMonth');
+    } else if (this.get('dateFilter') === 'upcoming') {
+      dateFilter = (trip) => !trip.get('isPast');
     }
     let filterFunc = dateFilter;
     let filterString = this.get('filter').toLowerCase();

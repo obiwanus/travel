@@ -11,6 +11,8 @@ export default DS.Model.extend({
   start_date: DS.attr('naivedate'),
   end_date: DS.attr('naivedate'),
   comment: DS.attr('string'),
+  user_id: DS.attr('number'),   // used for quick filtering
+  user_email: DS.attr('string'),
   user: DS.belongsTo('user'),
 
   when: Ember.computed('start_date', function () {
@@ -42,6 +44,7 @@ export default DS.Model.extend({
     }
   }),
 
+  // Returns a block of text used when filtering
   _filterText: Ember.computed('destination', 'start_date', 'end_date', 'comment', function () {
     return (
       this.get('destination') +

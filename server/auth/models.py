@@ -30,6 +30,9 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.email
 
+    def is_admin(self):
+        return self.role == self.ADMIN
+
 
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):

@@ -136,7 +136,7 @@ class UserList(APIView):
     def delete(self, request, id):
         user = get_object_or_404(User, id=id)
 
-        if user.role == UserProfile.ADMIN and request.user.profile.role != UserProfile.ADMIN:
+        if user.role == UserProfile.ADMIN and not request.user.profile.is_admin():
             return Response({'errors': ['Insufficient permissions to delete user']},
                             status=status.HTTP_403_FORBIDDEN)
 
