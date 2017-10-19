@@ -4,10 +4,6 @@ PYTHON := python3.5
 server:
 	$(PYTHON) manage.py runserver 0.0.0.0:8000
 
-.PHONY: emailserver
-emailserver:
-	$(PYTHON) -u -m smtpd -n -c DebuggingServer localhost:1025
-
 .PHONY: install
 install:
 	pip install -U -r requirements.txt
@@ -15,3 +11,7 @@ install:
 .PHONY: test
 test:
 	py.test tests
+
+.PHONY: debug_test
+debug_test:
+	py.test -s tests

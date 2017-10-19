@@ -3,3 +3,4 @@ django-rest-framework
 django-cors-headers
 pytest
 ipdb
+requests
