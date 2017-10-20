@@ -13,6 +13,9 @@ class IsUserManager(BasePermission):
         if not request.user.is_authenticated():
             return False
 
+        if request.user.is_superuser:
+            return True
+
         try:
             role = request.user.profile.role
         except UserProfile.DoesNotExist:

@@ -66,8 +66,8 @@ def test_every_role_can_view_trips(normal, manager, admin):
     assert_can_view_trips(admin)
 
 
-def test_user_can_add_trips(normal):
-    response = normal.post('/trips/', {
+def add_test_trip_as(session):
+    response = session.post('/trips/', {
         'trip': {
             'destination': 'Test destination',
             'start_date': '2017-07-20',
@@ -77,17 +77,22 @@ def test_user_can_add_trips(normal):
     })
     assert response.status_code == 201
     assert 'trip' in response.json()
+    return response
 
 
-def test_user_can_delete_trips(normal):
-    response = normal.get('/trips/').json()
-    assert 'trips' in response
-    trip_to_delete = None
-    for trip in response['trips']:
-        if 'test' in trip['destination'].lower():
-            trip_to_delete = trip
-            break
-    assert trip_to_delete is not None
-    response = normal.delete('/trips/%s/' % trip['id'])
+def delete_test_trip_as(session, trip_id):
+    return session.delete('/trips/%s/' % trip_id)
+
+
+def test_user_can_add_and_delete_trips(normal):
+    response = add_test_trip_as(normal)
+    trip_id = response.json()['trip']['id']
+    response = delete_test_trip_as(normal, trip_id)
     assert response.status_code == 204
 
+
+def test_user_cant_delete_other_users_trips(normal, manager):
+    response = add_test_trip_as(manager)
+    trip_id = response.json()['trip']['id']
+    response = delete_test_trip_as(normal, trip_id)
+    assert response.status_code == 404

@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import permission_classes, authentication_classes
+from rest_framework.decorators import permission_classes
 
 from trips.models import Trip
 from trips.serializers import TripS
@@ -31,6 +31,7 @@ class TripList(APIView):
         return Response({'trip': serializer.data}, status=status.HTTP_201_CREATED)
 
 
+    
 class TripDetail(APIView):
 
     def _check_permissions(self, request, trip):
