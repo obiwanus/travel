@@ -5,7 +5,7 @@ export default Ember.Component.extend({
   filter: '',
 
   filterFunction: Ember.computed('trips', 'dateFilter', 'filter', function () {
-    let dateFilter = (trip) => true;  // no filter
+    let dateFilter = () => true;  // no filter
     if (this.get('dateFilter') === 'past') {
       dateFilter = (trip) => trip.get('isPast');
     } else if (this.get('dateFilter') === 'next_month') {

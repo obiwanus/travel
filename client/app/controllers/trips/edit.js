@@ -9,11 +9,10 @@ export default Ember.Controller.extend(FormMixin, {
 
   actions: {
 
-    save(tripData) {
-      let trip = this.get('trip');
+    save(trip) {
       this.submitForm(trip).then(() => {
         this.get('messages').success(this, 'Trip has been saved');
-        this.transitionToRoute('trips');
+        history.back();
       }).catch(() => {});
     },
 

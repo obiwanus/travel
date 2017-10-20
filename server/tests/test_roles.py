@@ -3,69 +3,84 @@ import requests
 
 
 def api_url(url):
-    return "http://localhost:8000/api%s" % url
+    return 'http://localhost:8000/api%s' % url
 
 
-def login_as(email, password):
-    session = requests.session()
-    login = session.post(api_url("/login/"), {
-        "email": email,
-        "password": password,
-    })
-    assert login.status_code == 200
-    return session
+class Session:
+
+    def __init__(self, email, password):
+        self.session = requests.session()
+        login = self.session.post(api_url('/login/'), {
+            'email': email,
+            'password': password,
+        })
+        assert login.status_code == 200
+        response = self.session.get(api_url('/csrf/token/'))
+        self.csrf_token = response.json().get('csrfmiddlewaretoken')
+        assert self.csrf_token is not None
+
+    def get(self, url):
+        return self.session.get(api_url(url))
+
+    def post(self, url, data):
+        return self.session.post(api_url(url), json=data, headers={
+            'X-CSRFToken': self.csrf_token,
+        })
+
+    def delete(self, url):
+        return self.session.delete(api_url(url), headers={
+            'X-CSRFToken': self.csrf_token,
+        })
+
+    def put(self, url):
+        return self.session.put(api_url(url), json=data, headers={
+            'X-CSRFToken': self.csrf_token,
+        })
 
 
 
 @pytest.fixture
 def normal():
-    return login_as("normal@test.com", "pqlapqlapqla")
+    return Session('normal@test.com', 'pqlapqlapqla')
 
 
 @pytest.fixture
 def manager():
-    return login_as("user-manager@test.com", "pqlapqlapqla")
+    return Session('user-manager@test.com', 'pqlapqlapqla')
 
 
 @pytest.fixture
 def admin():
-    return login_as("user-manager@test.com", "pqlapqlapqla")
-
-
-def test_can_get_csrf_token():
-    response = requests.get(api_url('/csrf/token/'))
-    assert response.status_code == 200
-    assert 'csrfmiddlewaretoken' in response.json()
+    return Session('user-manager@test.com', 'pqlapqlapqla')
 
 
 def assert_can_view_trips(session):
-    response = session.get(api_url("/trips/"))
+    response = session.get('/trips/')
     assert response.status_code == 200
     assert 'trips' in response.json()
 
 
-# def test_every_role_can_view_trips(normal, manager, admin):
-#     assert_can_view_trips(normal)
-#     assert_can_view_trips(manager)
-#     assert_can_view_trips(admin)
+def test_every_role_can_view_trips(normal, manager, admin):
+    assert_can_view_trips(normal)
+    assert_can_view_trips(manager)
+    assert_can_view_trips(admin)
 
 
 def test_user_can_add_trips(normal):
-    response = normal.post(api_url("/trips/"), {
+    response = normal.post('/trips/', {
         'trip': {
-            'destination': "Test destination",
+            'destination': 'Test destination',
             'start_date': '2017-07-20',
             'end_date': '2017-11-23',
-            'comment': "hopefully this will be deleted",
+            'comment': 'hopefully this will be deleted',
         }
     })
-    import ipdb; ipdb.set_trace()
     assert response.status_code == 201
     assert 'trip' in response.json()
 
 
 def test_user_can_delete_trips(normal):
-    response = normal.get(api_url("/trips/")).json()
+    response = normal.get('/trips/').json()
     assert 'trips' in response
     trip_to_delete = None
     for trip in response['trips']:
@@ -73,6 +88,6 @@ def test_user_can_delete_trips(normal):
             trip_to_delete = trip
             break
     assert trip_to_delete is not None
-    response = normal.delete(api_url("/trips/%s/" % trip['id']))
+    response = normal.delete('/trips/%s/' % trip['id'])
     assert response.status_code == 204
 

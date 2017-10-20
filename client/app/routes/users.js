@@ -2,10 +2,18 @@ import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
+
   messages: Ember.inject.service(),
+  user: Ember.inject.service(),
 
   model() {
     return this.get('store').findAll('user');
+  },
+
+  beforeModel() {
+    if (!this.get('user.isUserManager')) {
+      this.transitionTo('index');
+    }
   },
 
   actions: {

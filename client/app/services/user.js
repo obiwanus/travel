@@ -43,11 +43,14 @@ export default Ember.Service.extend({
   }),
 
   isAdmin: Ember.computed('user', function () {
-    return (this.get('user.role').toLowerCase() == 'administrator');
+    const role = this.get('user.role');
+    return (role && role.toLowerCase() == 'administrator');
   }),
 
   isUserManager: Ember.computed('user', function () {
-    const role = this.get('user.role').toLowerCase();
+    let role = this.get('user.role');
+    if (!role) return false;
+    role = role.toLowerCase();
     return (role == 'administrator') || (role == 'user manager');
   }),
 

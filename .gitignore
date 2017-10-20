@@ -22,7 +22,10 @@ testem.log
 bower.json.ember-try
 package.json.ember-try
 
+package-lock.json
+
 *.sublime-*
 
 *.sqlite3
 __pycache__
+.cache

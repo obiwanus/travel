@@ -7,4 +7,10 @@ export default TripRoute.extend({
     return this.get('store').query('trip', {all: true});
   },
 
+  beforeModel() {
+    if (!this.get('user.isAdmin')) {
+      this.transitionTo('index');
+    }
+  },
+
 });
